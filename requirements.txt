@@ -4,9 +4,8 @@ pydantic
 SQLAlchemy
 python-dotenv
 langchain
-langchain-core
 langchain-community
-langchain-openai
 ollama
 requests
 tqdm
+huggingface-hub
