@@ -1,18 +1,17 @@
-# backend/db_setup.py
 from backend.database import engine, SessionLocal, Base
 from backend.models import Employee
 
 def init_db():
-    """Create tables."""
+#Create tables
     Base.metadata.create_all(bind=engine)
-    print("✅ Database and tables created successfully!")
+    print("Database and tables created successfully!")
 
 def seed_db():
-    """Insert sample employees if table is empty."""
+#Insert sample employees if table is empty
     db = SessionLocal()
     try:
         if db.query(Employee).first():
-            print("⚠️ Employees table already has data. Skipping seed.")
+            print("Employees table already has data. Skipping seed.")
             return
 
         employees = [

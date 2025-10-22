@@ -1,17 +1,14 @@
-# backend/main.py
 from fastapi import FastAPI, HTTPException
 from sqlalchemy import text
 from backend.database import SessionLocal
 from backend.schema import QueryRequest
-from backend.llm_chain import chain, extract_sql  # updated llm_chain using Runnable syntax
+from backend.llm_chain import chain, extract_sql
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 import os
 
-# Load .env file
 load_dotenv()
 
-# Set environment variables for LangChain
 os.environ["LANGCHAIN_TRACING_V2"] = os.getenv("LANGCHAIN_TRACING_V2", "false")
 api_key = os.getenv("LANGCHAIN_API_KEY")
 os.environ["LANGCHAIN_API_KEY"] = api_key
@@ -21,7 +18,7 @@ app = FastAPI(title="AI Query-to-SQL API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # adjust if you have a specific frontend URL
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -31,30 +28,30 @@ def run_query(request: QueryRequest):
     question = request.question
     db = SessionLocal()
     try:
-        # Step 1: Convert natural language → SQL
-        llm_response = chain.invoke({"question": question})  # ✅ returns a string now
+        #Convert natural language to SQL
+        llm_response = chain.invoke({"question": question})
         sql_query = extract_sql(llm_response)
         print(f"Generated SQL:\n{sql_query}")
 
-        # Step 2: Allow only SELECT queries
+        # Allow only SELECT queries
         if not sql_query.strip().upper().startswith("SELECT"):
             raise HTTPException(status_code=400, detail="Only SELECT queries are allowed.")
 
-        # Step 3: Case-insensitive string matching for SQLite
+        #Case-insensitive string matching for SQLite
         sql_query_ci = sql_query
         string_columns = ["department", "name"]
         for col in string_columns:
             sql_query_ci = sql_query_ci.replace(f"{col} =", f"{col} COLLATE NOCASE =")
 
-        # Step 4: Execute SQL
+        #Execute SQL
         result = db.execute(text(sql_query_ci))
         rows = result.fetchall()
         columns = result.keys()
 
-        # Step 5: Convert to list of dicts
+        #Convert to list of dicts
         results = [dict(zip(columns, row)) for row in rows]
 
-        # Step 6: Handle empty results
+        # To Handle empty results
         if not results:
             return {
                 "query": sql_query,

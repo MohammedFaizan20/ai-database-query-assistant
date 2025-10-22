@@ -2,10 +2,10 @@ import re
 from langchain_core.prompts import PromptTemplate
 from langchain_community.llms.ollama import Ollama
 
-# Setup Ollama LLM
+#Setup Ollama LLM
 llm = Ollama(model="llama3")
 
-# Define prompt
+#Define prompt
 prompt = PromptTemplate(
     input_variables=["question"],
     template=(
@@ -19,10 +19,8 @@ prompt = PromptTemplate(
     ),
 )
 
-# Build the chain (Runnable-style)
-chain = prompt | llm  # ✅ replaces LLMChain in LangChain 1.0
+chain = prompt | llm
 
-# Extract SQL query
 def extract_sql(llm_response: str) -> str:
     match = re.search(r"```sql(.*?)```", llm_response, re.DOTALL | re.IGNORECASE)
     if match:

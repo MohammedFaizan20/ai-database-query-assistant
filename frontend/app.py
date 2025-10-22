@@ -2,11 +2,11 @@ import streamlit as st
 import requests
 import pandas as pd
 
-BACKEND_URL = "https://unspiriting-scarlett-cyclopaedically.ngrok-free.dev/query"
+BACKEND_URL = " https://unspiriting-scarlett-cyclopaedically.ngrok-free.dev/query"
 
 st.set_page_config(page_title="AI Database Query Assistant", layout="wide")
 
-# --- Custom CSS for dark glassy aesthetic ---
+
 st.markdown("""
 <style>
 /* App background */
@@ -70,11 +70,11 @@ p {
 </style>
 """, unsafe_allow_html=True)
 
-# --- Header ---
+#Header
 st.markdown("<h1>AI Database Query Assistant</h1>", unsafe_allow_html=True)
 st.markdown("<p>Transform natural language into SQL queries instantly</p>", unsafe_allow_html=True)
 
-# --- Sample data ---
+#Sample data
 with st.expander("Sample Data in the Database (click to view)"):
     sample_data = pd.DataFrame([
         {"Name": "Alice", "Department": "HR", "Salary": 60000},
@@ -88,13 +88,13 @@ with st.expander("Sample Data in the Database (click to view)"):
     st.markdown("- List all employees in Engineering with salary above 40000")
     st.markdown("- Who earns more than 70000?")
 
-# --- Input box ---
+#Input box
 question = st.text_area(
     "Ask a Question",
     placeholder="e.g., Show all employees in Engineering with salary above 50000"
 )
 
-# --- Run Query ---
+#Run query
 if st.button("Run Query"):
     if not question.strip():
         st.warning("Please enter a question")
