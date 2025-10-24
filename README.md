@@ -4,7 +4,7 @@ This project is an AI-powered backend application that converts natural language
 
 **Overview**
 
-This system allows users to interact with databases conversationally — no SQL knowledge required.
+This system allows users to interact with databases conversationally - no SQL knowledge required.
 For example, a user can ask:
 
 “Show all employees in the Engineering department earning above 50,000.”
